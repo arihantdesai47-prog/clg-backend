@@ -22,7 +22,18 @@ model district {
   studentaddress_studentaddress_DistrictIdTodistrict          studentaddress[] @relation("studentaddress_DistrictIdTodistrict")
   studentaddress_studentaddress_permanentDistrictIdTodistrict studentaddress[] @relation("studentaddress_permanentDistrictIdTodistrict")
 
+  taluk                                                       taluk[]
+
   @@index([stateId], map: "District_stateId_fkey")
+}
+
+model taluk {
+  id         Int      @id @default(autoincrement())
+  name       String
+  districtId Int
+  district   district @relation(fields: [districtId], references: [id], onDelete: Cascade)
+
+  @@index([districtId])
 }
 
 model state {
