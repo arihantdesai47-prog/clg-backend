@@ -128,15 +128,15 @@ model studentaddress {
 model studentdocuments {
   id                   Int     @id @default(autoincrement())
   studentId            Int     @unique(map: "StudentDocuments_studentId_key")
-  sslcMarkscard        String?
-  pucMarkscard         String?
-  casteCertificate     String?
-  incomeCertificate    String?
-  transferCertificate  String?
-  migrationCertificate String?
-  photo                String?
-  signature            String?
-  studyCertificate     String?
+  sslcMarkscard        Json?
+  pucMarkscard         Json?
+  casteCertificate     Json?
+  incomeCertificate    Json?
+  transferCertificate  Json?
+  migrationCertificate Json?
+  photo                Json?
+  signature            Json?
+  studyCertificate     Json?
   student              student @relation(fields: [studentId], references: [id], map: "StudentDocuments_studentId_fkey")
 }
 

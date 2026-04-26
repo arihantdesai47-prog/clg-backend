@@ -14,7 +14,7 @@ const hashString = (data: string): string => {
  */
 export const checkAadhaar = async (req: Request, res: Response) => {
   try {
-    const { aadhaar } = req.body;
+    const { aadhaar, applicationId } = req.body;
 
     if (!aadhaar || aadhaar.length !== 12 || isNaN(Number(aadhaar))) {
       return res.status(400).json({
@@ -25,8 +25,11 @@ export const checkAadhaar = async (req: Request, res: Response) => {
 
     const hashedAadhaar = hashString(aadhaar);
 
-    const existingStudent = await prisma.student.findUnique({
-      where: { aadhaarHash: hashedAadhaar },
+    const existingStudent = await prisma.student.findFirst({
+      where: {
+        aadhaarHash: hashedAadhaar,
+        ...(applicationId && { id: { not: Number(applicationId) } })
+      },
     });
 
     return res.status(200).json({
@@ -47,7 +50,7 @@ export const checkAadhaar = async (req: Request, res: Response) => {
  */
 export const checkCetNumber = async (req: Request, res: Response) => {
   try {
-    const { cetNumber, type } = req.body;
+    const { cetNumber, type, applicationId } = req.body;
 
     if (!cetNumber) {
       return res.status(400).json({
@@ -56,9 +59,13 @@ export const checkCetNumber = async (req: Request, res: Response) => {
       });
     }
 
-    const whereClause = type === "DCET" 
+    const whereClause: any = type === "DCET" 
       ? { dcetNumber: cetNumber.toUpperCase() } 
       : { cetNumber: cetNumber.toUpperCase() };
+
+    if (applicationId) {
+      whereClause.id = { not: Number(applicationId) };
+    }
 
     const existingStudent = await prisma.student.findFirst({
       where: whereClause,

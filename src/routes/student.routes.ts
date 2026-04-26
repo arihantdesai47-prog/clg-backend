@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createAdmission,
+  updateAdmission,
   finalSubmit,
   getMyAdmission
 } from "../controllers/student.controller";
@@ -25,6 +26,13 @@ router.post(
   verifyToken,
   authorizeRoles("STUDENT"),
   createAdmission
+);
+
+router.put(
+  "/update/:id",
+  verifyToken,
+  authorizeRoles("STUDENT"),
+  updateAdmission
 );
 
 router.get(

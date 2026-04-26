@@ -3,7 +3,8 @@ import prisma from "../config/prisma";
 import { AuthRequest } from "../middlewares/auth.middleware";
 import {
   createStudentAdmission,
-  submitApplication
+  submitApplication,
+  updateStudentAdmission
 } from "../services/student.service";
 
 // ✅ Create Admission
@@ -26,6 +27,44 @@ export const createAdmission = async (
     );
 
     res.status(201).json({
+      success: true,
+      data: student
+    });
+
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// ✅ Update Admission
+export const updateAdmission = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const { admissionType, branchId, aadhaar, cetNumber, dcetNumber } = req.body;
+    const applicationId = parseInt(req.params.id);
+
+    if (isNaN(applicationId)) {
+      return res.status(400).json({ success: false, message: "Invalid application ID" });
+    }
+
+    const userId = req.user.userId;
+
+    const student = await updateStudentAdmission(
+      userId,
+      applicationId,
+      admissionType,
+      branchId,
+      aadhaar,
+      cetNumber,
+      dcetNumber
+    );
+
+    res.status(200).json({
       success: true,
       data: student
     });
