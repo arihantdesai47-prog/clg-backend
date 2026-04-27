@@ -28,7 +28,7 @@ export const savePersonalDetails = async (
     student.status !== "CORRECTION_REQUIRED" &&
     student.status !== "REJECTED"
   ) {
-    throw new Error("Editing not allowed after submission");
+    throw new Error(`Editing not allowed after submission (Current status: ${student.status})`);
   }
 
   const parsedDob = data.dateOfBirth ? new Date(data.dateOfBirth) : new Date();

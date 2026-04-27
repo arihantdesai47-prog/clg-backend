@@ -127,7 +127,7 @@ export const updateStudentAdmission = async (
     existing.status !== "CORRECTION_REQUIRED" &&
     existing.status !== "REJECTED"
   ) {
-    throw new Error("Editing not allowed after submission");
+    throw new Error(`Editing not allowed after submission (Current status: ${existing.status})`);
   }
 
   // Pre-calculate hashing if requested
