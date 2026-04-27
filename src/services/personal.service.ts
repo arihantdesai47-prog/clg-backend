@@ -25,7 +25,8 @@ export const savePersonalDetails = async (
 
   if (
     student.status !== "REGISTERED" &&
-    student.status !== "CORRECTION_REQUIRED"
+    student.status !== "CORRECTION_REQUIRED" &&
+    student.status !== "REJECTED"
   ) {
     throw new Error("Editing not allowed after submission");
   }

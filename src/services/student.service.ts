@@ -122,6 +122,14 @@ export const updateStudentAdmission = async (
     throw new Error("Admission record not found or access denied.");
   }
 
+  if (
+    existing.status !== "REGISTERED" &&
+    existing.status !== "CORRECTION_REQUIRED" &&
+    existing.status !== "REJECTED"
+  ) {
+    throw new Error("Editing not allowed after submission");
+  }
+
   // Pre-calculate hashing if requested
   const aadhaarHash = aadhaar ? hashString(aadhaar) : null;
 

@@ -7,6 +7,22 @@ export const saveDocuments = async (
   files: any
 ) => {
 
+  const student = await prisma.student.findUnique({
+    where: { id: studentId }
+  });
+
+  if (!student) {
+    throw new Error("Admission not found");
+  }
+
+  if (
+    student.status !== "REGISTERED" &&
+    student.status !== "CORRECTION_REQUIRED" &&
+    student.status !== "REJECTED"
+  ) {
+    throw new Error("Editing not allowed after submission");
+  }
+
   const documentData: any = {};
   
   const uploadToCloudinary = async (fileArray: any) => {
